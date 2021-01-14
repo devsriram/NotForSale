@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Button } from 'react-native';
 import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import {PrimaryButton} from "../components/custom-button"
+import {getAppState} from "../redux/state-provider"
+import { UserAction } from '../redux/user-reducer';
 
 
 const { width, height } = Dimensions.get('window');
@@ -25,7 +27,15 @@ const coordinates = {
     longitude : 0
 }
 
-export default function AppView() {
+export default function HomeMapView() {
+  const {
+    state,
+    dispatch
+} = getAppState();
+
+  useEffect(() => {
+    console.log("user is",state.user)
+  },[])
 
   const [region, setRegion] = useState(initialMapData);
   const [marker, setMarker] = useState(coordinates);
@@ -73,6 +83,9 @@ export default function AppView() {
       </MapView>
       <View style = {styles.buttons}>
         <PrimaryButton buttonTitle = "Add Item" onPress = {() => {}} />
+        <PrimaryButton buttonTitle = "Logout" 
+          onPress = {() => {dispatch({type: UserAction.LOGOUT})}} 
+        />
       </View>
     </View>
   );

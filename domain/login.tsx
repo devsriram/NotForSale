@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, SafeAreaView, Button, StyleSheet, TextInput } from "react-native";
+import { getAppState } from "../redux/state-provider";
+import { UserAction } from "../redux/user-reducer";
 
 function LoginScreen(props) {
+    const {
+        state,
+        dispatch
+    } = getAppState();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -10,6 +16,7 @@ function LoginScreen(props) {
   const signIn = () => {
     if(email == "sriram" && password == "qwerty") {
         console.log("welcome")
+        dispatch({type: UserAction.LOGIN_SUCCESS, payload: email})
     }
     else {
         console.log("sorry");
