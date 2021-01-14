@@ -4,7 +4,8 @@ import { getAppState } from "../redux/state-provider";
 import { UserAction } from "../redux/user-reducer";
 import firebase from "../firebase-config"
 
-function LoginScreen({navigation}) {
+
+function SignUpScreen({navigation}) {
     const {
         state,
         dispatch
@@ -12,13 +13,21 @@ function LoginScreen({navigation}) {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [fullName, setFullName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
 
 
-  const signIn = () => {
-      firebase.auth().signInWithEmailAndPassword(email,password)
+  const signUp = () => {
+      firebase.auth().createUserWithEmailAndPassword(email,password)
       .then((res)=> {
-        let email = res.user?.email;    
-        dispatch({type: UserAction.LOGIN_SUCCESS, payload: email})
+        const userData = {
+            userId : email,
+            email : email,
+            phoneNumber : phoneNumber
+        }
+        firebase.firestore().collection("users").doc(userData.email).set(userData);
+        let userEmail = res.user?.email;
+        dispatch({type: UserAction.LOGIN_SUCCESS, payload: userEmail})
         console.log("welcome",res.user?.email)
       })
       .catch((error) => {
@@ -38,9 +47,24 @@ function LoginScreen({navigation}) {
     <SafeAreaView>
         <View style={styles.container}>
         <TextInput
+            placeholder = "Full Name"
+            onChangeText = {(txt) => setFullName(txt)}
+            autoCapitalize = "none"
+            autoCorrect={false}
+            style={styles.formInput} 
+        />
+        <TextInput
+            placeholder = "Phone Number"
+            onChangeText = {(txt) => setPhoneNumber(txt)}
+            autoCapitalize = "none"
+            autoCorrect={false}
+            style={styles.formInput} 
+        />
+        <TextInput
             placeholder = "Email"
             onChangeText = {(txt) => setEmail(txt)}
             autoCapitalize = "none"
+            keyboardType = "email-address"
             autoCorrect={false}
             style={styles.formInput} 
         />
@@ -52,8 +76,8 @@ function LoginScreen({navigation}) {
             style={styles.formInput} 
         />
         </View>
-        <Button title = "Login" onPress = {() => signIn()} />
-        <Button title = "Sign up" onPress = {() => navigation.navigate("signUp")} />
+        <Button title = "Sign up" onPress = {() => signUp()} />
+        <Button title = "Back to Login" onPress = {() => navigation.navigate("login")} />
     </SafeAreaView>
   );
 }
@@ -71,4 +95,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LoginScreen;
+export default SignUpScreen;

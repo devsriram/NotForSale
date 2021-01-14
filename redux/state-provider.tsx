@@ -4,7 +4,7 @@ import { UserState } from "./user-reducer";
 
 interface ContextProps {
     state: UserState;
-    dispatch: ({ type, payload }: { type: string; payload?: string }) => void;
+    dispatch: ({ type, payload }: { type: string; payload? : any}) => void;
   }
   
   export const StateContext = createContext({} as ContextProps);

@@ -8,7 +8,7 @@ export enum UserAction {
   
   export interface UserState {
     isAuthenticated: boolean;
-    user?: string | null;
+    user: string | null;
   }
   
   export const initialUserState: UserState = {
@@ -29,7 +29,7 @@ export enum UserAction {
         return {
           ...state,
           isAuthenticated: true,
-          user: action.payload.email,
+          user: action.payload,
         };
   
       case UserAction.LOGOUT:
