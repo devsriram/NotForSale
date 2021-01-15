@@ -81,12 +81,12 @@ export default function HomeMapView() {
           
         />
       </MapView>
-      <View style = {styles.buttons}>
+      {/* <View style = {styles.buttons}>
         <PrimaryButton buttonTitle = "Add Item" onPress = {() => {}} />
         <PrimaryButton buttonTitle = "Logout" 
           onPress = {() => {dispatch({type: UserAction.LOGOUT})}} 
         />
-      </View>
+      </View> */}
     </View>
   );
 }

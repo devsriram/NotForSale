@@ -5,9 +5,9 @@ import HomeMapView from "../domain/home-map-view"
 import LoginScreen from "../domain/login"
 import {getAppState} from "../redux/state-provider"
 import SignUpScreen from "../domain/sign-up"
-import {AuthenticationStack} from "../types"
+import {AuthenticationStackList} from "../types"
 
-const AuthStack = createStackNavigator<AuthenticationStack>();
+const AuthStack = createStackNavigator<AuthenticationStackList>();
 
 const AuthNavigator = () => {
     const {
