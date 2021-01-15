@@ -5,7 +5,8 @@ import HomeMapView from "../domain/home-map-view"
 import LoginScreen from "../domain/login"
 import {getAppState} from "../redux/state-provider"
 import AuthNavigator from "./auth-navigator"
-import {RootStack} from "../types"
+import {RootStackList} from "../types"
+import BottomTabNavigator from "../navigation/bottom-tab"
 
 const RootNavigator = () => {
     const {
@@ -13,15 +14,15 @@ const RootNavigator = () => {
         dispatch
     } = getAppState();
 
-    const Stack = createStackNavigator<RootStack>();
+    const Stack = createStackNavigator<RootStackList>();
     return (
         <NavigationContainer>
             <Stack.Navigator
-                initialRouteName = "home"
+                initialRouteName = "bottomTab"
                 screenOptions = {{headerShown : false}}
             >
                 {(state.isAuthenticated) ? (
-                    <Stack.Screen name = "home" component ={HomeMapView}/>
+                    <Stack.Screen name = "bottomTab" component={BottomTabNavigator}/>
                 ) : (
                     <Stack.Screen name = "auth" component ={AuthNavigator}/>
                 )}

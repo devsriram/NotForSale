@@ -22,10 +22,10 @@ function SignUpScreen({navigation}) {
       .then((res)=> {
         const userData = {
             userId : email,
-            email : email,
+            fullname : fullName,
             phoneNumber : phoneNumber
         }
-        firebase.firestore().collection("users").doc(userData.email).set(userData);
+        firebase.firestore().collection("users").doc(userData.userId).set(userData);
         let userEmail = res.user?.email;
         dispatch({type: UserAction.LOGIN_SUCCESS, payload: userEmail})
         console.log("welcome",res.user?.email)
