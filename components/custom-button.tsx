@@ -15,10 +15,12 @@ const styles = StyleSheet.create({
         padding : 15,
         alignItems : "center",
         justifyContent : "center",
-        backgroundColor : "#ff69b4",
+        backgroundColor : "#fc5c65",
         width : "90%",
         marginBottom : 10,
-        alignSelf : "center"
+        marginTop : 20,
+        alignSelf : "center",
+        borderRadius : 5,
     },
     primaryButtonText : {
         fontSize: 14,

@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, Button, StyleSheet, TextInput } from "react-n
 import { getAppState } from "../redux/state-provider";
 import { UserAction } from "../redux/user-reducer";
 import firebase from "../firebase-config"
+import {PrimaryButton} from "../components/custom-button"
 
 function LoginScreen({navigation}) {
     const {
