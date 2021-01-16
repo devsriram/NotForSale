@@ -21,11 +21,13 @@ const RootNavigator = () => {
                 initialRouteName = "bottomTab"
                 screenOptions = {{headerShown : false}}
             >
-                {(state.isAuthenticated) ? (
+                <Stack.Screen name = "bottomTab" component={BottomTabNavigator}/>
+                <Stack.Screen name = "auth" component ={AuthNavigator}/>
+                {/* {(state.isAuthenticated) ? (
                     <Stack.Screen name = "bottomTab" component={BottomTabNavigator}/>
                 ) : (
                     <Stack.Screen name = "auth" component ={AuthNavigator}/>
-                )}
+                )} */}
             </Stack.Navigator>
         </NavigationContainer>
     );
