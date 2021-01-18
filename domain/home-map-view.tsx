@@ -5,6 +5,8 @@ import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
 import {PrimaryButton} from "../components/custom-button"
 import {getAppState} from "../redux/state-provider"
 import { UserAction } from '../redux/user-reducer';
+import ItemService from "../firebase-services/get-item-data"
+import {initialItemData, itemData} from "../types"
 
 
 const { width, height } = Dimensions.get('window');
@@ -39,11 +41,36 @@ export default function HomeMapView() {
 
   const [region, setRegion] = useState(initialMapData);
   const [marker, setMarker] = useState(coordinates);
+  const initialData : itemData[] = [];
+  const [itemsData, setItemsData] = useState(initialData);
 
   useEffect(() => {
     // console.log("my firebase config :",firebase);
     getCurrentLocation();
   },[])
+
+  useEffect(()  =>  {
+    ItemService().getAllItems()
+    .then((docSnapshot) => {
+      const localData : itemData[] = [];
+      docSnapshot.forEach((doc) => {
+        const data = {
+          itemId: doc.get("itemId"),
+          userId: doc.get("userId"),
+          itemName: doc.get("itemName"),
+          desc: doc.get("desc"),
+          condition: doc.get("condition"),
+          contact: doc.get("contact"),
+          timestamp: doc.get("timestamp"),
+          coordinates: doc.get("coordinates"),
+          imageUri : doc.get("imageUri"),
+        }
+        localData.push(data);
+      })
+      setItemsData(localData);
+    })
+
+  })
 
   const getCurrentLocation = async () => {
     await navigator.geolocation.getCurrentPosition((position) => {

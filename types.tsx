@@ -31,3 +31,37 @@ export const initialUserData : UserData = {
   phoneNumber : "",
   name : ""
 }
+
+export interface coordinates {
+  longitute : number,
+  latitude : number
+}
+
+export const initialCoordinates = {
+  longitute : 0,
+  latitude : 0
+}
+
+export interface itemData {
+  itemId: number,
+  userId: string,
+  itemName: string,
+  desc: string,
+  condition: string,
+  contact: string,
+  timestamp: Date,
+  coordinates: coordinates[], 
+  imageUri : string,
+}
+
+export const initialItemData : itemData = {
+  itemId: 0,
+  userId: "",
+  itemName: "",
+  desc: "",
+  condition: "",
+  contact: "",
+  timestamp: new Date(),
+  coordinates: [initialCoordinates],
+  imageUri : "",
+}

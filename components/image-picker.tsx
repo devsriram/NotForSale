@@ -9,7 +9,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
-function ImageInput(props) {
+function ImageInput({data}) {
 
   const [imageUri, setImageUri] = useState("");
 
@@ -40,6 +40,7 @@ function ImageInput(props) {
         });
         if (!result.cancelled) {
           setImageUri(result.uri);
+          data.imageUri = result.uri;
         }
     } catch (error) {
       console.log("Error reading an image", error);
