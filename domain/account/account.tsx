@@ -24,7 +24,7 @@ function AccountScreen(props) {
 
     return (
         <View style = {styles.container}>
-            <Text style = {styles.nameText}>Hello {state.user},</Text>
+            <Text style = {styles.nameText}>Hello Sriram{state.user},</Text>
             <TouchableOpacity style = {styles.buttonContainer}>
                 <MaterialCommunityIcons name = "account" size = {40} color = "#fc5c65"/>
                 <Text style = {styles.buttonText}>My Profile</Text>

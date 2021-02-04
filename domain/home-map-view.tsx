@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Button } from 'react-native';
-import MapView, { AnimatedRegion, Marker } from 'react-native-maps';
+import MapView, { AnimatedRegion, Marker, Callout, CalloutSubview } from 'react-native-maps';
 import {PrimaryButton} from "../components/custom-button"
 import {getAppState} from "../redux/state-provider"
 import { UserAction } from '../redux/user-reducer';
 import ItemService from "../firebase-services/get-item-data"
 import {initialItemData, itemData} from "../types"
+import MarkItems from "../components/marker"
+import { TouchableHighlight, TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const { width, height } = Dimensions.get('window');
@@ -25,34 +27,38 @@ const initialMapData = {
     longitudeDelta: 0
 }
 const coordinates = {
-    latitude : 0,
-    longitude : 0
+  latitude: 42.65460967523673,
+  longitude: -71.32841492305862,
 }
 
-export default function HomeMapView() {
+
+export default function HomeMapView({navigation}) {
   const {
     state,
     dispatch
 } = getAppState();
 
-  useEffect(() => {
-    console.log("user is",state.user)
-  },[])
-
   const [region, setRegion] = useState(initialMapData);
   const [marker, setMarker] = useState(coordinates);
   const initialData : itemData[] = [];
-  const [itemsData, setItemsData] = useState(initialData);
+  const localData : itemData[] = [];
+  const [itemsData, setItemsData] = useState([initialItemData]);
 
-  useEffect(() => {
-    // console.log("my firebase config :",firebase);
-    getCurrentLocation();
+  // useEffect(() => {
+  //   console.log("user is",markers)
+  // },[])
+
+  useEffect(()  =>  {
+    getAllItems();
   },[])
 
   useEffect(()  =>  {
+    getCurrentLocation();
+  },[])
+
+  const getAllItems = () => {
     ItemService().getAllItems()
     .then((docSnapshot) => {
-      const localData : itemData[] = [];
       docSnapshot.forEach((doc) => {
         const data = {
           itemId: doc.get("itemId"),
@@ -62,21 +68,22 @@ export default function HomeMapView() {
           condition: doc.get("condition"),
           contact: doc.get("contact"),
           timestamp: doc.get("timestamp"),
-          coordinates: doc.get("coordinates"),
+          coordinate: doc.get("coordinate"),
           imageUri : doc.get("imageUri"),
         }
-        localData.push(data);
+        localData.push(data)
       })
+      
       setItemsData(localData);
+      //console.log("items data is ",itemsData)
     })
-
-  })
+  }
 
   const getCurrentLocation = async () => {
     await navigator.geolocation.getCurrentPosition((position) => {
         let region = {
           latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          longitude: position.coords.longitude, 
           latitudeDelta: 0.0722,
           longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO
         };
@@ -101,19 +108,29 @@ export default function HomeMapView() {
         zoomTapEnabled={false}
         showsUserLocation={true}
       >
-        <Marker
-          coordinate={marker}
-          title="This is a native view"
-          description="Lorem ipsum dolor sit amet"
-          
-        />
+        {itemsData.map((item) => (
+            <Marker 
+              key = {item.itemId}
+              coordinate={item.coordinate}
+              // title = {item.title}
+              // onCalloutPress = {()=>{}}
+            >
+              <Callout tooltip style = {styles.markerContainer} onPress = {() => navigation.navigate("itemDetails", {itemDetails : item})}>
+                <Text style = {styles.itemTitle}>{item.itemName}</Text>
+                {/* <Button title = "View Details" onPress = {() => navigation.navigate("itemDetails")}/> */}
+                <TouchableOpacity
+                  style = {styles.markerButton} 
+                  onPress = {() => navigation.navigate("itemDetails", {itemDetails : item})}
+                >
+                  <Text>View Details</Text>
+                </TouchableOpacity>
+              </Callout>
+              
+              
+            </Marker>
+        ))}
+            
       </MapView>
-      {/* <View style = {styles.buttons}>
-        <PrimaryButton buttonTitle = "Add Item" onPress = {() => {}} />
-        <PrimaryButton buttonTitle = "Logout" 
-          onPress = {() => {dispatch({type: UserAction.LOGOUT})}} 
-        />
-      </View> */}
     </View>
   );
 }
@@ -133,5 +150,20 @@ const styles = StyleSheet.create({
     position : "absolute",
     bottom : width * 0.2,
     width : "100%"
+  },
+  markerContainer : {
+    padding : 3,
+    alignContent : "center",
+    alignItems : "center"
+  },
+  itemTitle : {
+    fontSize : 18
+  },
+  markerButton : {
+    padding : 8,
+    backgroundColor : "#fc5c65",
+    borderRadius : 7,
+    marginTop : 5
   }
 });
+
