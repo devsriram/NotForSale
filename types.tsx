@@ -1,3 +1,6 @@
+import { LatLng } from "react-native-maps";
+import { number } from "yup/lib/locale";
+
 export type RootStackList = {
     bottomTab: undefined;
     auth: undefined;
@@ -20,6 +23,11 @@ export type AccountStackList = {
   changePassword: undefined
 }
 
+export type ItemDetailsNavigator = {
+  home : undefined,
+  itemDetails : undefined
+}
+
 export interface UserData {
   userId : string,
   phoneNumber : string,
@@ -33,13 +41,13 @@ export const initialUserData : UserData = {
 }
 
 export interface coordinates {
-  longitute : number,
-  latitude : number
+  latitude : number,
+  longitude : number,
 }
 
-export const initialCoordinates = {
-  longitute : 0,
-  latitude : 0
+export const initialCoordinates : coordinates = {
+  latitude: 42.65476340829496,
+  longitude: -71.32835290017333,
 }
 
 export interface itemData {
@@ -50,7 +58,7 @@ export interface itemData {
   condition: string,
   contact: string,
   timestamp: Date,
-  coordinates: coordinates[], 
+  coordinate: LatLng,
   imageUri : string,
 }
 
@@ -62,6 +70,32 @@ export const initialItemData : itemData = {
   condition: "",
   contact: "",
   timestamp: new Date(),
-  coordinates: [initialCoordinates],
+  coordinate: {
+    latitude : 0,
+    longitude : 0
+  },
   imageUri : "",
+}
+
+export const initialMarkerData = {
+    itemName: "",
+    desc: "",
+    itemId: 0,
+    condition : "",
+    contact : "",
+    imageUri : "",
+    userId : "",
+    timestamp : ""
+}
+
+export interface coordinatesData {
+  itemId : number,
+  itemName: string,
+  desc: string,
+  imageUri: string,
+  userId: string,
+  coordinate : {
+    latitude : number,
+    longitude : number
+  }
 }

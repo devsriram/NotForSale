@@ -1,13 +1,24 @@
 import { useState } from "react"
 import { number } from "yup/lib/locale"
 //import firebase from "../firebase-config"
-import firebase from '../firebase-config';
+import {database,storage} from '../firebase-config';
 import {itemData} from "../types"
 
 export default () => {
 
+    const setCurrentLocation = async (itemData) => {
+      await navigator.geolocation.getCurrentPosition((position) => {
+        const data = {
+          latitude : position.coords.latitude,
+          longitute : position.coords.longitude,
+            
+        }
+        itemData["coordinate"] = position;
+    })
+    }
+
     const getItemId = async () => {
-        return await firebase.firestore().collection("item-id-manager").doc("admin").get()
+        return await database.collection("item-id-manager").doc("admin").get()
     }
 
     const setItemId = async () => {
@@ -18,25 +29,26 @@ export default () => {
         let data = {
           itemId: newItemId,
         };
-        firebase.firestore().collection("item-id-manager").doc("admin").set(data);
+        database.collection("item-id-manager").doc("admin").set(data);
     };
 
     const storeImage = async (currentUri, itemId) => {
       const response = await fetch(currentUri);
       const blob = await response.blob();
-      var ref = firebase.storage().ref().child("item-images/" + itemId);
+      var ref = storage.ref().child("item-images/" + itemId);
       ref.put(blob);
     }
 
     const addItem = async (itemData : itemData, itemId) => {
       let newItemId = itemId.toString();
-      await firebase.firestore().collection("items").doc(newItemId).set(itemData);
+      await database.collection("items").doc(newItemId).set(itemData);
     }
 
     return {
           getItemId,
           setItemId,
           addItem,
-          storeImage
+          storeImage,
+          setCurrentLocation
     }
 }

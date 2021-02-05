@@ -68,15 +68,7 @@ function AddItemScreen(props) {
     const addItem = async (values) => {
         itemData["itemName"] = values.itemName;
         itemData["desc"] = values.description;
-        navigator.geolocation.getCurrentPosition((position) => {
-            const coordinateData : coordinates[] = [];
-            const data = {
-                longitute : position.coords.longitude,
-                latitude : position.coords.latitude
-            }
-            coordinateData.push(data);
-            itemData["coordinates"] = coordinateData;
-        })
+        await addItemService().setCurrentLocation(itemData)
         itemData["timestamp"] = new Date();
         let itemNum = await addItemService().getItemId();
         let newItemId: number = itemNum.data()?.itemId;
@@ -128,7 +120,7 @@ function AddItemScreen(props) {
                     <View style = {styles.nameContainer}>
                         <Text style = {styles.conditionText}>Item Name</Text>
                         <PrimaryInput 
-                            placeholderText = "Hii"
+                            placeholderText = "Name"
                             value = {values.itemName}
                             onChangeText={handleChange("itemName")}
                             onBlur={() => setFieldTouched("itemName")}
